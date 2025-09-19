@@ -19,14 +19,19 @@ public class Client {
         this.contactPerson = validateContactPerson(contactPerson);
     }
 
-    public static String validateOrganizationName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Название организации не может быть null");
+    private static String requireNonEmptyTrimmed(String value, String fieldName) {
+        if (value == null) {
+            throw new IllegalArgumentException(fieldName + " не может быть null");
         }
-        String trimmed = name.trim();
+        String trimmed = value.trim();
         if (trimmed.isEmpty()) {
-            throw new IllegalArgumentException("Название организации не может быть пустым");
+            throw new IllegalArgumentException(fieldName + " не может быть пустым");
         }
+        return trimmed;
+    }
+
+    public static String validateOrganizationName(String name) {
+        String trimmed = requireNonEmptyTrimmed(name, "Название организации");
         if (trimmed.length() < 2) {
             throw new IllegalArgumentException("Название организации слишком короткое (мин. 2 символа)");
         }
@@ -37,13 +42,7 @@ public class Client {
     }
 
     public static String validateTypeProperty(String type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Вид собственности не может быть null");
-        }
-        String trimmed = type.trim();
-        if (trimmed.isEmpty()) {
-            throw new IllegalArgumentException("Вид собственности не может быть пустым");
-        }
+        String trimmed = requireNonEmptyTrimmed(type, "Вид собственности");
         if (!trimmed.matches("^[A-Za-zА-Яа-яЁё]{2,50}$")) {
             throw new IllegalArgumentException("Вид собственности должен содержать только буквы (2–50 символов)");
         }
@@ -51,10 +50,7 @@ public class Client {
     }
 
     public static String validateAddress(String addr) {
-        if (addr == null) {
-            throw new IllegalArgumentException("Адрес не может быть null");
-        }
-        String trimmed = addr.trim();
+        String trimmed = requireNonEmptyTrimmed(addr, "Адрес");
         if (trimmed.length() < 3) {
             throw new IllegalArgumentException("Адрес слишком короткий (мин. 3 символа)");
         }
@@ -68,13 +64,7 @@ public class Client {
     }
 
     public static String validateContactPerson(String person) {
-        if (person == null) {
-            throw new IllegalArgumentException("Контактное лицо не может быть null");
-        }
-        String trimmed = person.trim();
-        if (trimmed.isEmpty()) {
-            throw new IllegalArgumentException("Контактное лицо не может быть пустым");
-        }
+        String trimmed = requireNonEmptyTrimmed(person, "Контактное лицо");
         if (!trimmed.matches("^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)?$")) {
             throw new IllegalArgumentException(
                     "Контактное лицо должно быть в формате 'Фамилия Имя (Отчество)', каждое слово с заглавной буквы"
@@ -99,7 +89,6 @@ public class Client {
         }
         throw new IllegalArgumentException("Некорректный формат номера телефона");
     }
-
     public int getClientId() {
         return clientId;
     }
