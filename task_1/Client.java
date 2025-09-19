@@ -11,18 +11,97 @@ public class Client {
     public Client(String organizationName, String typeProperty,
                   String address, String telephone, String contactPerson) {
         this.clientId = idCounter++;
-        this.organizationName = organizationName;
-        this.typeProperty = typeProperty;
-        this.address = address;
-        this.telephone = telephone;
-        this.contactPerson = contactPerson;
-    }
-    public int getClientId() {
-        return clientId;
+
+        this.organizationName = validateOrganizationName(organizationName);
+        this.typeProperty = validateTypeProperty(typeProperty);
+        this.address = validateAddress(address);
+        this.telephone = validateAndNormalizePhone(telephone);
+        this.contactPerson = validateContactPerson(contactPerson);
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public static String validateOrganizationName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Название организации не может быть null");
+        }
+        String trimmed = name.trim();
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Название организации не может быть пустым");
+        }
+        if (trimmed.length() < 2) {
+            throw new IllegalArgumentException("Название организации слишком короткое (мин. 2 символа)");
+        }
+        if (trimmed.length() > 100) {
+            throw new IllegalArgumentException("Название организации слишком длинное (макс. 100 символов)");
+        }
+        return trimmed;
+    }
+
+    public static String validateTypeProperty(String type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Вид собственности не может быть null");
+        }
+        String trimmed = type.trim();
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Вид собственности не может быть пустым");
+        }
+        if (!trimmed.matches("^[A-Za-zА-Яа-яЁё]{2,50}$")) {
+            throw new IllegalArgumentException("Вид собственности должен содержать только буквы (2–50 символов)");
+        }
+        return trimmed;
+    }
+
+    public static String validateAddress(String addr) {
+        if (addr == null) {
+            throw new IllegalArgumentException("Адрес не может быть null");
+        }
+        String trimmed = addr.trim();
+        if (trimmed.length() < 3) {
+            throw new IllegalArgumentException("Адрес слишком короткий (мин. 3 символа)");
+        }
+        if (trimmed.length() > 100) {
+            throw new IllegalArgumentException("Адрес слишком длинный (макс. 100 символов)");
+        }
+        if (!trimmed.matches("^[0-9A-Za-zА-Яа-яЁё ,.-]{3,100}$")) {
+            throw new IllegalArgumentException("Адрес содержит недопустимые символы");
+        }
+        return trimmed;
+    }
+
+    public static String validateContactPerson(String person) {
+        if (person == null) {
+            throw new IllegalArgumentException("Контактное лицо не может быть null");
+        }
+        String trimmed = person.trim();
+        if (trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Контактное лицо не может быть пустым");
+        }
+        if (!trimmed.matches("^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)?$")) {
+            throw new IllegalArgumentException(
+                    "Контактное лицо должно быть в формате 'Фамилия Имя (Отчество)', каждое слово с заглавной буквы"
+            );
+        }
+        return trimmed;
+    }
+
+    public static String validateAndNormalizePhone(String phone) {
+        if (phone == null) {
+            throw new IllegalArgumentException("Телефон не может быть null");
+        }
+        String cleaned = phone.replaceAll("[^0-9+]", "");
+        if (cleaned.matches("8\\d{10}")) {
+            return cleaned;
+        }
+        if (cleaned.matches("\\+7\\d{10}")) {
+            return "8" + cleaned.substring(2);
+        }
+        if (cleaned.matches("\\d{10}")) {
+            return "8" + cleaned;
+        }
+        throw new IllegalArgumentException("Некорректный формат номера телефона");
+    }
+
+    public int getClientId() {
+        return clientId;
     }
 
     public String getOrganizationName() {
@@ -30,7 +109,7 @@ public class Client {
     }
 
     public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
+        this.organizationName = validateOrganizationName(organizationName);
     }
 
     public String getTypeProperty() {
@@ -38,7 +117,7 @@ public class Client {
     }
 
     public void setTypeProperty(String typeProperty) {
-        this.typeProperty = typeProperty;
+        this.typeProperty = validateTypeProperty(typeProperty);
     }
 
     public String getAddress() {
@@ -46,7 +125,7 @@ public class Client {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = validateAddress(address);
     }
 
     public String getTelephone() {
@@ -54,7 +133,7 @@ public class Client {
     }
 
     public void setTelephone(String telephone) {
-        this.telephone = telephone;
+        this.telephone = validateAndNormalizePhone(telephone);
     }
 
     public String getContactPerson() {
@@ -62,7 +141,6 @@ public class Client {
     }
 
     public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
+        this.contactPerson = validateContactPerson(contactPerson);
     }
-
 }
