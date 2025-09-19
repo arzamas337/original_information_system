@@ -11,6 +11,18 @@ public class Main {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
         try {
+
+            System.out.println("\nСоздание клиента");
+            System.out.print("Введите название организации: ");
+            String orgName1 = Client.validateOrganizationName(scanner.nextLine());
+            System.out.print("Введите телефон: ");
+            String telephone1 = Client.validateAndNormalizePhone(scanner.nextLine());
+            System.out.print("Введите контактное лицо (Фамилия Имя (Отчество)): ");
+            String contactPerson1 = Client.validateContactPerson(scanner.nextLine());
+            ClientShort clientFromConsole1 = new ClientShort(orgName1, contactPerson1, telephone1);
+            System.out.println("Клиент успешно создан");
+            System.out.println(clientFromConsole1.toStringShort());
+
             System.out.println("Создание клиента");
             String jsonPath = "C:/Users/user/Desktop/example.json";
             Client clientFromJson = new Client(jsonPath, true);
