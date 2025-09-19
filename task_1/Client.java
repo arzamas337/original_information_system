@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Client {
 
@@ -59,7 +60,7 @@ public class Client {
             throw new IllegalArgumentException("Ошибка в формате JSON", e);
         }
     }
-    
+
     private static String requireNonEmptyTrimmed(String value, String fieldName) {
         if (value == null) {
             throw new IllegalArgumentException(fieldName + " не может быть null");
@@ -131,7 +132,6 @@ public class Client {
         throw new IllegalArgumentException("Некорректный формат номера телефона");
     }
 
-    // === Геттеры / Сеттеры ===
     public int getClientId() {
         return clientId;
     }
@@ -175,7 +175,36 @@ public class Client {
     public void setContactPerson(String contactPerson) {
         this.contactPerson = validateContactPerson(contactPerson);
     }
+
+    public String toStringFull() {
+        return "Client {" +
+                "clientId=" + clientId +
+                ", organizationName='" + organizationName + '\'' +
+                ", typeProperty='" + typeProperty + '\'' +
+                ", address='" + address + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", contactPerson='" + contactPerson + '\'' +
+                '}';
+    }
+
+    public String toStringShort() {
+        return "Client {" +
+                "organizationName='" + organizationName + '\'' +
+                ", contactPerson='" + contactPerson + '\'' +
+                ", telephone='" + telephone + '\'' +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+        Client client = (Client) o;
+        return Objects.equals(organizationName, client.organizationName) &&
+                Objects.equals(contactPerson, client.contactPerson) &&
+                Objects.equals(telephone, client.telephone);
+    }
 }
+
 
 
 
