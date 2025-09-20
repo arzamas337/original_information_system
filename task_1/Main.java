@@ -11,57 +11,55 @@ public class Main {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
         try {
-
-            System.out.println("\nСоздание клиента");
+            System.out.println("\nСоздание краткого клиента");
             System.out.print("Введите название организации: ");
-            String orgName1 = Client.validateOrganizationName(scanner.nextLine());
+            String orgNameShort = scanner.nextLine();
             System.out.print("Введите телефон: ");
-            String telephone1 = Client.validateAndNormalizePhone(scanner.nextLine());
-            System.out.print("Введите контактное лицо (Фамилия Имя (Отчество)): ");
-            String contactPerson1 = Client.validateContactPerson(scanner.nextLine());
-            ClientShort clientFromConsole1 = new ClientShort(orgName1, contactPerson1, telephone1);
-            System.out.println("Клиент успешно создан");
-            System.out.println(clientFromConsole1.toStringShort());
+            String phoneShort = scanner.nextLine();
+            System.out.print("Введите контактное лицо: ");
+            String contactShort = scanner.nextLine();
 
-            System.out.println("Создание клиента");
+            ClientShort shortClient = new ClientShort(orgNameShort, contactShort, phoneShort);
+            System.out.println("Краткий клиент создан:");
+            System.out.println(shortClient.toStringShort());
+
+            System.out.println("\nСоздание клиента из JSON");
             String jsonPath = "C:/Users/user/Desktop/example.json";
-            Client clientFromJson = new Client(jsonPath, true);
-            System.out.println("Клиент успешно создан");
-            System.out.println(clientFromJson.toStringFull());
-            System.out.println(clientFromJson.toStringShort());
+            Client fullClientFromJson = new Client(jsonPath, true);
+            System.out.println("Полный клиент создан:");
+            System.out.println(fullClientFromJson.toStringFull());
+            System.out.println("Краткая версия:");
+            System.out.println(fullClientFromJson.toStringShort());
 
-            System.out.println("\nСоздание клиента");
+            System.out.println("\nСоздание клиента из строки данных");
             String dataString = "ООО_X5;Частная;Москва,ул.Ленина,д.10;89161234567;Иванов Иван Иванович";
-            Client clientFromString = new Client(dataString);
-            System.out.println("Клиент успешно создан");
-            System.out.println(clientFromString.toStringFull());
+            Client fullClientFromString = new Client(dataString);
+            System.out.println("Полный клиент создан:");
+            System.out.println(fullClientFromString.toStringFull());
 
-            System.out.println("\nСоздание клиента");
+            System.out.println("\nСоздание клиента через консоль");
             System.out.print("Введите название организации: ");
-            String orgName = Client.validateOrganizationName(scanner.nextLine());
-
+            String orgNameFull = scanner.nextLine();
             System.out.print("Введите тип собственности: ");
-            String typeProperty = Client.validateTypeProperty(scanner.nextLine());
-
+            String typeProperty = scanner.nextLine();
             System.out.print("Введите адрес: ");
-            String address = Client.validateAddress(scanner.nextLine());
-
+            String address = scanner.nextLine();
             System.out.print("Введите телефон: ");
-            String telephone = Client.validateAndNormalizePhone(scanner.nextLine());
+            String phoneFull = scanner.nextLine();
+            System.out.print("Введите контактное лицо: ");
+            String contactFull = scanner.nextLine();
 
-            System.out.print("Введите контактное лицо (Фамилия Имя (Отчество)): ");
-            String contactPerson = Client.validateContactPerson(scanner.nextLine());
+            Client fullClientConsole = new Client(orgNameFull, typeProperty, address, phoneFull, contactFull);
+            System.out.println("Полный клиент создан:");
+            System.out.println(fullClientConsole.toStringFull());
 
-            Client clientFromConsole = new Client(orgName, typeProperty, address, telephone, contactPerson);
-            System.out.println("Клиент успешно создан");
-            System.out.println(clientFromConsole.toStringFull());
-
-            Client clientA = new Client("ООО_X5", "Частная", "Москва, ул. Ленина, д.10", "89161234567", "Иванов Иван Иванович");
+            Client clientA = new Client("ООО_X5", "Частная", "Москва, ул. Ленина, д.15", "89161234567", "Иванов Иван Иванович");
             Client clientB = new Client("ООО_X5", "Частная", "Москва, ул. Ленина, д.15", "89161234567", "Иванов Иван Иванович");
-            System.out.println("Сравнение clientA и clientB: " + clientA.equals(clientB));
+            Client clientC = new Client("ООО_X5", "Частная", "Москва, ул. Ленина, д.15", "89161234568", "Иванов Иван Иванович");
 
-            Client clientC = new Client("ООО_X5", "Частная", "Москва, ул. Ленина, д.10", "89161234568", "Иванов Иван Иванович");
-            System.out.println("Сравнение clientA и clientC: " + clientA.equals(clientC));
+            System.out.println("\nСравнение клиентов:");
+            System.out.println("clientA и clientB : " + clientA.equals(clientB));
+            System.out.println("clientA и clientC : " + clientA.equals(clientC));
 
         } catch (IOException e) {
             System.out.println("Ошибка чтения файла: " + e.getMessage());
