@@ -2,17 +2,19 @@ package org.example;
 
 public class ClientShort {
 
-    private String organizationName;
-    private String contactPerson;
-    private String telephone;
+    protected String organizationName;
+    protected String contactPerson;
+    protected String telephone;
+
+    public ClientShort() {}
 
     public ClientShort(String organizationName, String contactPerson, String telephone) {
-        this.organizationName = Client.validateOrganizationName(organizationName);
-        this.contactPerson = Client.validateContactPerson(contactPerson);
-        this.telephone = Client.validateAndNormalizePhone(telephone);
+        this.organizationName = validateOrganizationName(organizationName);
+        this.contactPerson = validateContactPerson(contactPerson);
+        this.telephone = validateAndNormalizePhone(telephone);
     }
 
-    private static String requireNonEmptyTrimmed(String value, String fieldName) {
+    protected static String requireNonEmptyTrimmed(String value, String fieldName) {
         if (value == null) {
             throw new IllegalArgumentException(fieldName + " не может быть null");
         }
@@ -38,7 +40,7 @@ public class ClientShort {
         String trimmed = requireNonEmptyTrimmed(person, "Контактное лицо");
         if (!trimmed.matches("^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)?$")) {
             throw new IllegalArgumentException(
-                    "Контактное лицо должно быть в формате 'Фамилия Имя (Отчество)', каждое слово с заглавной буквы"
+                    "Контактное лицо должно быть в формате 'Фамилия Имя (Отчество)'"
             );
         }
         return trimmed;
@@ -74,12 +76,10 @@ public class ClientShort {
     }
 
     public String toStringShort() {
-        return "Client {" +
+        return "ClientShort {" +
                 "organizationName='" + organizationName + '\'' +
                 ", contactPerson='" + contactPerson + '\'' +
                 ", telephone='" + telephone + '\'' +
                 '}';
     }
-
 }
-
