@@ -6,20 +6,14 @@ import java.util.List;
 
 public class MyClient_rep_db extends MyClient_rep {
 
-    private final String url = "jdbc:postgresql://localhost:5432/MyClient_db";
-    private final String user = "postgres";
-    private final String password = "art554499";
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
-    }
+    private final DatabaseConnection db = DatabaseConnection.getInstance();
 
     @Override
     public List<Client> readAll() throws Exception {
         List<Client> list = new ArrayList<>();
         String sql = "SELECT * FROM clients ORDER BY clientId";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -41,9 +35,8 @@ public class MyClient_rep_db extends MyClient_rep {
     @Override
     public Client getById(int id) throws Exception {
         String sql = "SELECT * FROM clients WHERE clientId = ?";
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -67,9 +60,8 @@ public class MyClient_rep_db extends MyClient_rep {
         String sql = "SELECT clientId, organizationName, contactPerson, telephone FROM clients " +
                 "ORDER BY clientId LIMIT ? OFFSET ?";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, n);
             stmt.setInt(2, k * n);
             ResultSet rs = stmt.executeQuery();
@@ -88,15 +80,14 @@ public class MyClient_rep_db extends MyClient_rep {
     }
 
     @Override
-    public void writeAll(List<Client> clients) {
+    protected void writeAll(List<Client> clients) {
         throw new UnsupportedOperationException("writeAll not supported for DB");
     }
 
     @Override
     public void add(Client client) throws Exception {
         String sql = "INSERT INTO clients (organizationName, typeProperty, address, telephone, contactPerson) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, client.getOrganizationName());
             stmt.setString(2, client.getTypeProperty());
@@ -110,7 +101,7 @@ public class MyClient_rep_db extends MyClient_rep {
     @Override
     public boolean delete(int id) throws Exception {
         String sql = "DELETE FROM clients WHERE clientId = ?";
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
@@ -120,7 +111,7 @@ public class MyClient_rep_db extends MyClient_rep {
     @Override
     public boolean replace(int id, Client updatedClient) throws Exception {
         String sql = "UPDATE clients SET organizationName=?, typeProperty=?, address=?, telephone=?, contactPerson=? WHERE clientId=?";
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, updatedClient.getOrganizationName());
             stmt.setString(2, updatedClient.getTypeProperty());
@@ -135,7 +126,7 @@ public class MyClient_rep_db extends MyClient_rep {
     @Override
     public int get_count() throws Exception {
         String sql = "SELECT COUNT(*) FROM clients";
-        try (Connection conn = getConnection();
+        try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             rs.next();
