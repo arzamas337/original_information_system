@@ -17,9 +17,8 @@ public class Main_db {
             System.out.println("3. Найти клиента по ID");
             System.out.println("4. Удалить клиента по ID");
             System.out.println("5. Заменить клиента по ID");
-            System.out.println("6. Сортировать по названию организации");
-            System.out.println("7. Получить список (часть данных)");
-            System.out.println("8. Показать количество клиентов");
+            System.out.println("6. Получить список (часть данных)");
+            System.out.println("7. Показать количество клиентов");
             System.out.println("0. Выход");
             System.out.print("Выберите действие: ");
 
@@ -29,7 +28,7 @@ public class Main_db {
             try {
                 switch (choice) {
                     case 1 -> {
-                        List<Client> clients = myClient_rep_db.readAll();
+                        List<Client> clients = myClient_rep_db.readAll_clients();
                         if (clients.isEmpty()) System.out.println("Список клиентов пуст.");
                         else clients.forEach(c -> System.out.println(c.toStringFull()));
                     }
@@ -45,19 +44,19 @@ public class Main_db {
                         System.out.print("Контактное лицо: ");
                         String contact = scanner.nextLine();
 
-                        myClient_rep_db.add(new Client(org, type, addr, phone, contact));
+                        myClient_rep_db.add_client(new Client(org, type, addr, phone, contact));
                         System.out.println("Клиент добавлен.");
                     }
                     case 3 -> {
                         System.out.print("Введите ID клиента: ");
                         int id = scanner.nextInt();
-                        Client client = myClient_rep_db.getById(id);
+                        Client client = myClient_rep_db.getById_client(id);
                         System.out.println(client != null ? client.toStringFull() : "Клиент не найден.");
                     }
                     case 4 -> {
                         System.out.print("Введите ID клиента для удаления: ");
                         int delId = scanner.nextInt();
-                        System.out.println(myClient_rep_db.delete(delId) ? "Удалено." : "Клиент не найден.");
+                        System.out.println(myClient_rep_db.delete_client(delId) ? "Удалено." : "Клиент не найден.");
                     }
                     case 5 -> {
                         System.out.print("Введите ID клиента для замены: ");
@@ -74,24 +73,20 @@ public class Main_db {
                         System.out.print("Новое контактное лицо: ");
                         String contact = scanner.nextLine();
 
-                        boolean replaced = myClient_rep_db.replace(repId, new Client(org, type, addr, phone, contact));
+                        boolean replaced = myClient_rep_db.replace_client(repId, new Client(org, type, addr, phone, contact));
                         System.out.println(replaced ? "Заменено." : "Клиент не найден.");
                     }
                     case 6 -> {
-                        myClient_rep_db.sortByField("organizationName", true);
-                        System.out.println("Сортировка выполнена по названию организации.");
-                    }
-                    case 7 -> {
                         System.out.print("Введите номер страницы (k): ");
                         int k = scanner.nextInt();
                         System.out.print("Введите размер страницы (n): ");
                         int n = scanner.nextInt();
 
-                        List<String> page = myClient_rep_db.get_k_n_short_list(k, n);
+                        List<String> page = myClient_rep_db.get_k_n_short_list_clients(k, n);
                         if (page.isEmpty()) System.out.println("Нет данных для отображения.");
                         else page.forEach(System.out::println);
                     }
-                    case 8 -> System.out.println("Количество клиентов: " + myClient_rep_db.get_count());
+                    case 7 -> System.out.println("Количество клиентов: " + myClient_rep_db.get_count_clients());
                     case 0 -> {
                         System.out.println("Выход из программы...");
                         return;
