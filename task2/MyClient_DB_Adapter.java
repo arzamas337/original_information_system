@@ -12,7 +12,7 @@ public class MyClient_DB_Adapter extends MyClient_rep {
 
     @Override
     protected List<Client> readAll() throws Exception {
-        return dbRepository.readAll();
+        return dbRepository.readAll_clients();
     }
 
     @Override
@@ -22,31 +22,31 @@ public class MyClient_DB_Adapter extends MyClient_rep {
 
     @Override
     public Client getById(int id) throws Exception {
-        return dbRepository.getById(id);
+        return dbRepository.getById_client(id);
     }
 
     @Override
     public List<String> get_k_n_short_list(int k, int n) throws Exception {
-        return dbRepository.get_k_n_short_list(k, n);
+        return dbRepository.get_k_n_short_list_clients(k, n);
     }
 
     @Override
     public void add(Client client) throws Exception {
-        dbRepository.add(client);
+        dbRepository.add_client(client);
     }
 
     @Override
     public boolean delete(int id) throws Exception {
-        return dbRepository.delete(id);
+        return dbRepository.delete_client(id);
     }
 
     @Override
     public boolean replace(int id, Client updatedClient) throws Exception {
-        return dbRepository.replace(id, updatedClient);
+        return dbRepository.replace_client(id, updatedClient);
     }
 
     @Override
     public int get_count() throws Exception {
-        return dbRepository.get_count();
+        return dbRepository.get_count_clients();
     }
 }
