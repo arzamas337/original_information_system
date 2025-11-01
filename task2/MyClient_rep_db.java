@@ -4,12 +4,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyClient_rep_db extends MyClient_rep {
+public class MyClient_rep_db  {
 
     private final DatabaseConnection db = DatabaseConnection.getInstance();
 
-    @Override
-    public List<Client> readAll() throws Exception {
+    public List<Client> readAll_clients() throws Exception {
         List<Client> list = new ArrayList<>();
         String sql = "SELECT * FROM clients ORDER BY clientId";
 
@@ -32,8 +31,7 @@ public class MyClient_rep_db extends MyClient_rep {
         return list;
     }
 
-    @Override
-    public Client getById(int id) throws Exception {
+    public Client getById_client(int id) throws Exception {
         String sql = "SELECT * FROM clients WHERE clientId = ?";
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -54,8 +52,7 @@ public class MyClient_rep_db extends MyClient_rep {
         }
     }
 
-    @Override
-    public List<String> get_k_n_short_list(int k, int n) throws Exception {
+    public List<String> get_k_n_short_list_clients(int k, int n) throws Exception {
         List<String> list = new ArrayList<>();
         String sql = "SELECT clientId, organizationName, contactPerson, telephone FROM clients " +
                 "ORDER BY clientId LIMIT ? OFFSET ?";
@@ -79,13 +76,7 @@ public class MyClient_rep_db extends MyClient_rep {
         return list;
     }
 
-    @Override
-    protected void writeAll(List<Client> clients) {
-        throw new UnsupportedOperationException("writeAll not supported for DB");
-    }
-
-    @Override
-    public void add(Client client) throws Exception {
+    public void add_client(Client client) throws Exception {
         String sql = "INSERT INTO clients (organizationName, typeProperty, address, telephone, contactPerson) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -98,8 +89,7 @@ public class MyClient_rep_db extends MyClient_rep {
         }
     }
 
-    @Override
-    public boolean delete(int id) throws Exception {
+    public boolean delete_client(int id) throws Exception {
         String sql = "DELETE FROM clients WHERE clientId = ?";
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -108,8 +98,7 @@ public class MyClient_rep_db extends MyClient_rep {
         }
     }
 
-    @Override
-    public boolean replace(int id, Client updatedClient) throws Exception {
+    public boolean replace_client(int id, Client updatedClient) throws Exception {
         String sql = "UPDATE clients SET organizationName=?, typeProperty=?, address=?, telephone=?, contactPerson=? WHERE clientId=?";
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -123,8 +112,7 @@ public class MyClient_rep_db extends MyClient_rep {
         }
     }
 
-    @Override
-    public int get_count() throws Exception {
+    public int get_count_clients() throws Exception {
         String sql = "SELECT COUNT(*) FROM clients";
         try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement();
