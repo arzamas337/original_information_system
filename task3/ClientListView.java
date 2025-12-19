@@ -1,5 +1,6 @@
 package org.example.view;
 
+import org.example.model.decorator.SortMode;
 import org.example.model.decorator.ViewMode;
 import org.example.model.entity.Client;
 import org.example.model.factory.DataSourceType;
@@ -10,7 +11,8 @@ public class ClientListView {
 
     public static String render(List<Client> clients,
                                 DataSourceType source,
-                                ViewMode viewMode) {
+                                ViewMode viewMode,
+                                SortMode sortMode) {
 
         StringBuilder rows = new StringBuilder();
 
@@ -58,7 +60,6 @@ public class ClientListView {
                     <button>Добавить клиента</button>
                 </a>
 
-                <!-- 🔹 ОДНА ФОРМА: источник + фильтр -->
                 <form method="get" action="/clients"
                       style="display:inline-block; margin-left: 10px;">
 
@@ -72,6 +73,13 @@ public class ClientListView {
                         <option value="NONE">Без фильтра</option>
                         <option value="PRIVATE" %s>Частная собственность</option>
                         <option value="STATE" %s>Государственная</option>
+                    </select>
+
+                    <!-- сортировка -->
+                    <select name="sort">
+                        <option value="NONE">Без сортировки</option>
+                        <option value="NAME_ASC" %s>По названию (A → Z)</option>
+                        <option value="NAME_DESC" %s>По названию (Z → A)</option>
                     </select>
 
                     <button type="submit">Применить</button>
@@ -97,6 +105,8 @@ public class ClientListView {
                 renderSourceOptions(source),
                 viewMode == ViewMode.PRIVATE ? "selected" : "",
                 viewMode == ViewMode.STATE ? "selected" : "",
+                sortMode == SortMode.NAME_ASC ? "selected" : "",
+                sortMode == SortMode.NAME_DESC ? "selected" : "",
                 rows
         );
     }
