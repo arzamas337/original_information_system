@@ -20,8 +20,10 @@ public class ClientListView {
                     <td>%s</td>
                     <td>
                         <a href="/client?id=%d&source=%s" target="_blank" class="btn btn-open">Открыть</a>
-                        &nbsp;
-                        <a href="/client/edit?id=%d&source=%s" target="_blank" class="btn btn-open">Редактировать</a>
+                        <a href="/client/edit?id=%d&source=%s" target="_blank" class="btn btn-edit">Редактировать</a>
+                        <a href="/client/delete?id=%d&source=%s"
+                           class="btn btn-delete"
+                           onclick="return confirm('Удалить клиента %s ?');">🗑</a>
                     </td>
                 </tr>
             """.formatted(
@@ -30,7 +32,9 @@ public class ClientListView {
                     c.getContactPerson(),
                     c.getTelephone(),
                     c.getClientId(), source,
-                    c.getClientId(), source
+                    c.getClientId(), source,
+                    c.getClientId(), source,
+                    c.getOrganizationName()
             ));
         }
 
