@@ -20,6 +20,8 @@ public class ClientListView {
                     <td>%s</td>
                     <td>
                         <a href="/client?id=%d&source=%s" target="_blank" class="btn btn-open">Открыть</a>
+                        &nbsp;
+                        <a href="/client/edit?id=%d&source=%s" target="_blank" class="btn btn-open">Редактировать</a>
                     </td>
                 </tr>
             """.formatted(
@@ -27,8 +29,8 @@ public class ClientListView {
                     c.getOrganizationName(),
                     c.getContactPerson(),
                     c.getTelephone(),
-                    c.getClientId(),
-                    source
+                    c.getClientId(), source,
+                    c.getClientId(), source
             ));
         }
 
