@@ -1,5 +1,6 @@
 package org.example.view;
 
+import org.example.model.decorator.ViewMode;
 import org.example.model.entity.Client;
 import org.example.model.factory.DataSourceType;
 
@@ -7,7 +8,9 @@ import java.util.List;
 
 public class ClientListView {
 
-    public static String render(List<Client> clients, DataSourceType source) {
+    public static String render(List<Client> clients,
+                                DataSourceType source,
+                                ViewMode viewMode) {
 
         StringBuilder rows = new StringBuilder();
 
@@ -18,7 +21,7 @@ public class ClientListView {
                     <td>%s</td>
                     <td>%s</td>
                     <td>%s</td>
-                    <td>
+                    <td class="actions">
                         <a href="/client?id=%d&source=%s" target="_blank" class="btn btn-open">Открыть</a>
                         <a href="/client/edit?id=%d&source=%s" target="_blank" class="btn btn-edit">Редактировать</a>
                         <a href="/client/delete?id=%d&source=%s"
@@ -55,9 +58,23 @@ public class ClientListView {
                     <button>Добавить клиента</button>
                 </a>
 
-                <form method="get" action="/clients" style="display:inline-block; margin-left: 10px;">
-                    <select name="source">%s</select>
-                    <button type="submit">Выбрать</button>
+                <!-- 🔹 ОДНА ФОРМА: источник + фильтр -->
+                <form method="get" action="/clients"
+                      style="display:inline-block; margin-left: 10px;">
+
+                    <!-- источник данных -->
+                    <select name="source">
+                        %s
+                    </select>
+
+                    <!-- фильтр -->
+                    <select name="view">
+                        <option value="NONE">Без фильтра</option>
+                        <option value="PRIVATE" %s>Частная собственность</option>
+                        <option value="STATE" %s>Государственная</option>
+                    </select>
+
+                    <button type="submit">Применить</button>
                 </form>
 
                 <table>
@@ -78,6 +95,8 @@ public class ClientListView {
                 source,
                 source,
                 renderSourceOptions(source),
+                viewMode == ViewMode.PRIVATE ? "selected" : "",
+                viewMode == ViewMode.STATE ? "selected" : "",
                 rows
         );
     }
@@ -87,7 +106,11 @@ public class ClientListView {
         for (DataSourceType t : DataSourceType.values()) {
             sb.append("""
                 <option value="%s" %s>%s</option>
-            """.formatted(t, t == current ? "selected" : "", t));
+            """.formatted(
+                    t,
+                    t == current ? "selected" : "",
+                    t
+            ));
         }
         return sb.toString();
     }
